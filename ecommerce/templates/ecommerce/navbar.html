@@ -109,7 +109,15 @@
               <div class="icon icon-sm rounded-circle border">
                 <i class="fa fa-shopping-cart"></i>
               </div>
+              {% if quantity %}
+
+              <span class="badge badge-pill badge-danger notify"
+                >{{quantity}}</span
+              >
+              {% else %}
               <span class="badge badge-pill badge-danger notify">0</span>
+
+              {% endif %}
             </a>
           </div>
           <!-- widgets-wrap.// -->
