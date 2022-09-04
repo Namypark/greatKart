@@ -47,10 +47,11 @@
       <div class="row align-items-center">
         <div class="col-lg-2 col-md-3 col-6">
           <a href="{% url 'index' %}" class="brand-wrap">
-            <img class="logo" src="{% static './images/logo.png' %}" />
+          <img class="logo" src="{% static './images/logo.png' %}" />
           </a>
           <!-- brand-wrap.// -->
         </div>
+      
         <div class="col-lg col-sm col-md col-6 flex-grow-0">
           <div class="category-wrap dropdown d-inline-block float-right">
             <button
@@ -76,13 +77,15 @@
         <!-- col.// -->
         <a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
         <div class="col-lg col-md-6 col-sm-12 col">
-          <form action="#" class="search">
+          <form action="{% url 'search_store' %}" class="search" method="GET">
             <div class="input-group w-100">
               <input
                 type="text"
                 class="form-control"
                 style="width: 60%"
-                placeholder="Search"
+                placeholder="{{search_query}}"
+                name='search'
+                value="{{search_query}}"
               />
 
               <div class="input-group-append">

@@ -3,8 +3,17 @@
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
   <div class="container">
+
+  {% if 'search' in request.path %}
+  <h2 class="title-page">Search result({{product_count}})</h2>
+    
+
+  {% else %}
+
     <h2 class="title-page">Our Store</h2>
-  </div>
+  {% endif %}
+</div>
+
   <!-- container //  -->
 </section>
 <!-- ========================= SECTION INTRO END// ========================= -->
@@ -143,13 +152,15 @@
       <main class="col-md-9">
         <header class="border-bottom mb-4 pb-3">
           <div class="form-inline">
-            <span class="mr-md-auto">{{ product_count }} Items found </span>
+            <span class="mr-md-auto"> {{ product_count}} Item{{ product_count|pluralize:'s' }} found </span>
           </div>
         </header>
         <!-- sect-heading -->
 
         <div class="row">
+          {% if products %}
           {% for product in products %}
+
           <div class="col-md-4">
             <figure class="card card-product-grid">
               <div class="img-wrap">
@@ -170,31 +181,105 @@
                   <!-- price-wrap.// -->
                 </div>
                 <a
-                  href="{% url 'add_cart' product.id %}"
+                  href="{{product.get_absolute_url}}"
                   class="btn btn-block btn-primary"
-                  >Add to cart
+                  >view details
                 </a>
               </figcaption>
             </figure>
           </div>
-          <!-- col.// -->{% endfor %}
+          <!-- col.// -->
+          {% endfor %}
+          {% else %}
+          <div>
+            <h2>NO RESULTS FOUND</h2>
+          </div>
+          {% endif %}
 
           <!-- col.// -->
         </div>
         <!-- row end.// -->
 
         <nav class="mt-4" aria-label="Page navigation sample">
-          <ul class="pagination">
-            <li class="page-item disabled">
-              <a class="page-link" href="#">Previous</a>
-            </li>
-            <li class="page-item active">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
+          {% if 'search' in request.path %}
+            {% if products.has_other_pages %}
+            <ul class="pagination">
+              {% if products.has_previous %}
+
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?search={{search_query}}&page={{ products.previous_page_number }}"
+                  >Previous</a
+                >
+              </li>
+              {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="">Previous</a>
+              </li>
+              {% endif %} 
+              {% for i in custom_range %}
+              {% if i == products.number %}
+              <li class="page-item active">
+                <a class="page-link" href="?search={{search_query}}&page={{i}}">{{i}}</a>
+              </li>
+              {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?search={{search_query}}&page={{i}}">{{i}}</a>
+              </li>
+              {% endif %} {% endfor %}
+              {% if products.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?search={{search_query}}&page={{ products.next_page_number }}" data-page={{products.next_page_number}}>Next</a>
+              </li>
+              
+              {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="">Next</a>
+              </li>
+              {% endif %}
+            </ul>
+            {% endif %}
+            {% else %}
+              {% if products.has_other_pages %}
+              <ul class="pagination">
+                {% if products.has_previous %}
+
+                <li class="page-item">
+                  <a
+                    class="page-link"
+                    href="?page={{ products.previous_page_number }}"
+                    >Previous</a
+                  >
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="">Previous</a>
+                </li>
+                {% endif %} 
+                {% for i in custom_range %}
+                {% if i == products.number %}
+                <li class="page-item active">
+                  <a class="page-link" href="?page={{i}}">{{i}}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{i}}">{{i}}</a>
+                </li>
+                {% endif %} {% endfor %}
+                {% if products.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ products.next_page_number }}" data-page={{products.next_page_number}}>Next</a>
+                </li>
+                
+                {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="">Next</a>
+                </li>
+                {% endif %}
+              </ul>
+              {% endif %}
+            {% endif %}
         </nav>
       </main>
       <!-- col.// -->
