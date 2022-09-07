@@ -27,22 +27,18 @@ def pagination(request, products):
     page = request.GET.get("page")
     if page == None:
         page = 1
-    print(page)
     paginator = Paginator(products, 3)
 
     try:
         page_obj = paginator.get_page(page)
-        print(page, "TRY")
 
     except EmptyPage:
         page = paginator.num_pages
         page_obj = paginator.get_page(page)
-        print(page, "EMPTY PAGE")
 
     except PageNotAnInteger:
         page = 1
         page_obj = paginator.get_page(page)
-        print(page, "PAGE NOT FOUND")
 
     except InvalidPage:
         page = 1
