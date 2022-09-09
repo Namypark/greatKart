@@ -38,14 +38,11 @@ def store(request, category_slug=None):
         custom_range, page_obj = pagination(request, products)
 
         product_count = products.count()
-        print(products)
 
     else:
         products = Product.objects.all().filter(is_available=True).order_by("id")
-        print(type(products))
 
         custom_range, page_obj = pagination(request, products)
-        print((page_obj))
 
         product_count = products.count()
 
