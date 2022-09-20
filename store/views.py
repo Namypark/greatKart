@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from carts.models import CartItem
@@ -27,6 +28,7 @@ def search_store(request):
 
 
 def store(request, category_slug=None):
+
     categories = None
     products = None
 

@@ -68,7 +68,10 @@
     {% include "ecommerce/navbar.html" %}
 
     <!--nav-->
-    {% block content %} {% endblock %}
+    {% block content %} 
+    {% include 'ecommerce/messages.html' %}
+    
+    {% endblock %}
 
     <!--footer-->
     {% include "ecommerce/footer.html" %}
