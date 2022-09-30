@@ -31,7 +31,11 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path(
         "reset_password/",
-        auth_views.PasswordResetView.as_view(template_name="reset_password.html"),
+        auth_views.PasswordResetView.as_view(
+            template_name="reset_password.html",
+            html_email_template_name="activate_email.html",
+            subject_template_name="activate.txt",
+        ),
         name="reset_password",
     ),
     path(
@@ -55,5 +59,4 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-    path("accounts/", include("accounts.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
