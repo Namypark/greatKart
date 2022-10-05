@@ -9,49 +9,9 @@
         <div class="card">
           <div class="card-body">
             <h4 class="card-title mb-4">Billing Address</h4>
-            <form method="POST">
+            <form action="{% url 'place_order' %}" method="POST">
                 {% csrf_token %}
-                {% if request.user.authenticated %} 
-                <div class='form-row'>
-                    <div class='col form-group'>
-                    <label  for="">First Name</label>
-                    <input class='form-control' type="text" name="first_name" value='{{request.user.first_name}}' required>
-                    </div>
-                    
-                    <div class='col form-group'>
-                        <label  for="">Last Name</label>
-                        <input class='form-control' type="text" name="last_name" value='{{request.user.last_name}}'  id="">
-                    </div>
-                </div>
-                <div class='form-row'>
-                    <div class='col form-group'>
-                    <label  for="">Email</label>
-                    <input class='form-control' type="email" name="email" value='{{request.user.email}}'  required>
-                    </div>
-                    
-                    <div class='col form-group'>
-                        <label  for="">Phone Number</label>
-                        <input class='form-control' type="text" name="phone" value='{{request.user.phone_number}}'  id="" required>
-                    </div>
-                </div>
-                <div class='form-row'>
-                    <div class='col form-group'>
-                    <label  for="">Address 1</label>
-                    <input class='form-control' type="text" name="address_1" required>
-                    </div>
-                    
-                    <div class='col form-group'>
-                        <label  for="">Address 2</label>
-                        <input class='form-control' type="text" name="address_2" id="">
-                    </div>
-
-                </div>
-                
-                
-                
-                
-                {% else %}
-
+      
                 <div class='form-row'>
                     <div class='col form-group'>
                     <label  for="">First Name</label>
@@ -77,16 +37,16 @@
                 <div class='form-row'>
                     <div class='col form-group'>
                     <label  for="">Address 1</label>
-                    <input class='form-control' type="text" name="address_1" required>
+                    <input class='form-control' type="text" name="address_line_1" required>
                     </div>
                     
                     <div class='col form-group'>
                         <label  for="">Address 2</label>
-                        <input class='form-control' type="text" name="address_2" id="">
+                        <input class='form-control' type="text" name="address_line_2" id="">
                     </div>
 
                 </div>
-                {% endif %}
+
                 <div class='form-row'>
                     <div class='col form-group'>
                     <label  for="">City</label>
@@ -100,7 +60,7 @@
 
                     <div class='col form-group'>
                         <label  for="">Country</label>
-                        <input class='form-control' type="text" name=" country" id="" required>
+                        <input class='form-control' type="text" name="country" id="" required>
                     </div>
                 </div>
                 <div class='form-row'>
@@ -177,7 +137,7 @@
               </table>
            
            
-            <button type="submit" name="submit" class="btn btn-primary btn-block">Place Order</button>
+            <button type='submit' class="btn btn-primary btn-block">Place Order</button>
             <a href="{% url 'store' %}" class="btn btn-light btn-block"
               >Continue Shopping</a
             >

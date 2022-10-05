@@ -29,6 +29,7 @@ urlpatterns = [
     path("store/", include("store.urls")),
     path("carts/", include("carts.urls")),
     path("accounts/", include("accounts.urls")),
+    path("orders/", include("order.urls")),
     path(
         "reset_password/",
         auth_views.PasswordResetView.as_view(
