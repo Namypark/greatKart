@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
@@ -7,7 +8,32 @@ from django.contrib.auth.decorators import login_required
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
 from .forms import OrderForm
-from .models import Order
+from .models import Order, Payment
+
+
+@login_required(login_url="login")
+def payments(request):
+    body = json.loads(request.body)
+    order = Order.objects.get(
+        user=request.user, is_ordered=False, order_id=body["orderID"]
+    )
+    print(body)
+    print("------------------------")
+    print(order)
+    payment = Payment(
+        user=request.user,
+        payment_id=body["transID"],
+        payment_method=body["payment_method"],
+        amount_paid=order.order_total,
+        status=body["status"],
+    )
+
+    payment.save()
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+
+    return render(request, "order/payments.html")
 
 
 @login_required(login_url="login")
@@ -45,7 +71,6 @@ def place_order(request, total_price=0, quantity=0, total=0, tax=0):
             data.ip = request.META.get("REMOTE_ADDR")
             data.save()
             id = data.order_id
-            print(id)
             order = Order.objects.get(user=current_user, is_ordered=False, order_id=id)
             context = {
                 "order": order,
@@ -58,9 +83,3 @@ def place_order(request, total_price=0, quantity=0, total=0, tax=0):
             return render(request, "order/payments.html", context)
         else:
             return redirect("checkout")
-
-
-@login_required(login_url="login")
-def payments(request):
-
-    return render(request, "order/payments.html")

@@ -1,3 +1,4 @@
+from email.policy import default
 from tkinter import N
 from django.db import models
 import uuid
@@ -7,10 +8,12 @@ from store.models import Product, Variation
 # Create your models here.
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    payment_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    payment_id = models.CharField(max_length=100)
     amount_paid = models.CharField(max_length=200)
     payment_method = models.CharField(max_length=200)
-    status = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=100,
+    )
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -54,13 +57,13 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name}  {self.last_name}"
 
     def full_address(self):
         return f"{self.address_line_1}, {self.city}, {self.state},{self.country}"
 
     def __str__(self) -> str:
-        return self.full_name
+        return self.full_name()
 
 
 class OrderProduct(models.Model):
