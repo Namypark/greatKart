@@ -95,6 +95,8 @@ def add_cart(request, product_id):
                     product=product,
                     quantity=1,
                     user=current_user,
+                    cart=cart
+                    # ? ran into some issues so i had to  add the cart(it wasnt added before because it kept raising ID issues)
                     # ? had to add the cart because of cart.id issues
                 )
                 if len(product_variation) > 0:

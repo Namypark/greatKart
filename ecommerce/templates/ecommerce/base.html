@@ -91,6 +91,7 @@
   const csrftoken = getCookie('csrftoken');
   var payment_method = 'PayPal';
   var url = "{% url 'payments' %}";
+  var redirect_url = "{% url 'order_complete' %}"
     // Render the PayPal button into #paypal-button-container
     paypal.Buttons({
       style: {
@@ -133,10 +134,10 @@
                       status: orderData.status
                     }),
                   })
-                    //.then((response) => response.json())
-                    //.then((OrderData) => {
-                    //  console.log('Success:', OrderData);
-                    //})
+                    .then((response) => response.json())
+                    .then((OrderData) => {
+                      window.location.href = redirect_url +'?order_id='+OrderData.order_id+'&payment_id='+orderData.id;
+                    })
               }
                 // Replace the above to show a success message within this page, e.g.
                 //const element = document.getElementById('paypal-button-container');

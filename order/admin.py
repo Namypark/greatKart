@@ -4,6 +4,12 @@ from .models import Payment, Order, OrderProduct
 # Register your models here.
 
 
+class OrderProductInline(admin.TabularInline):
+    model = OrderProduct
+    readonly_fields = ["payment", "user", "product", "quantity", "product_price"]
+    extra = 0
+
+
 class PaymentAdmin(admin.ModelAdmin):
     model = Payment
     list_display = [
@@ -20,15 +26,22 @@ class PaymentAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     model = Order
     list_display = [
-        "user",
+        "full_name",
+        "phone",
+        "email",
+        "city",
+        "order_total",
+        "tax",
         "payment",
         "status",
         "order_id",
         "created_at",
-        "updated_at",
+        "is_ordered",
     ]
-    ordering = ["created_at"]
-    filter_horizontal = ()
+    list_filter = ["status", "is_ordered"]
+    search_fields = ["order_id", "first_name", "last_name", "phone", "email"]
+    inlines = [OrderProductInline]
+    list_per_page = 20
 
 
 class OrderProductAdmin(admin.ModelAdmin):
@@ -36,9 +49,9 @@ class OrderProductAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "order",
+        "ordered",
         "payment",
         "product",
-        "variation",
         "created_at",
         "updated_at",
     ]
