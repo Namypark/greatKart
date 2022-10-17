@@ -42,6 +42,10 @@ def payments(request):
     order.is_ordered = True
     order.save()
 
+    # print(payment.status, type(payment.status))
+    # if payment.status.lower() != "complete":
+    #     return redirect("order_failed")
+
     """
     1.) move items to the order product table
     2.) reduce the quantity of products in the store

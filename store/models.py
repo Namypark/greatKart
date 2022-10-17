@@ -1,7 +1,10 @@
 from django.db import models
+from django.db.models import Avg, Count
 from django.urls import reverse
 import uuid
+from accounts.models import Account
 from category.models import Category
+
 
 # Create your models here.
 class Product(models.Model):
@@ -25,6 +28,24 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+    def average_review(self):
+        reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(
+            average=Avg("rating")
+        )
+        avg = 0
+        if reviews["average"] != None:
+            avg = float(reviews["average"])
+        return avg
+
+    def counter_review(self):
+        reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(
+            count=Count("id")
+        )
+        count = 0
+        if reviews["count"] != None:
+            count = int(reviews["count"])
+        return count
 
 
 choices = (("color", "color"), ("size", "size"))
@@ -54,3 +75,18 @@ class Variation(models.Model):
 
     def __str__(self):
         return self.variation_value
+
+
+class ReviewRating(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=150, blank=True)
+    review = models.TextField(max_length=1000, blank=True)
+    rating = models.FloatField()
+    ip = models.GenericIPAddressField()
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subject
