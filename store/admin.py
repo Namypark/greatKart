@@ -1,8 +1,14 @@
 from django.contrib import admin
 
-from .models import Product, ReviewRating, Variation
-
+from .models import Product, ProductsGallery, ReviewRating, Variation
+import admin_thumbnails
 # Register your models here.
+
+
+@admin_thumbnails.thumbnail("image")
+class ProductGalleryInline(admin.TabularInline):
+    model = ProductsGallery
+    extra = 1
 
 
 @admin.register(Product)
@@ -17,6 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
         "modified_date",
         "is_available",
     )
+    inlines = [ProductGalleryInline]
 
 
 class VariationAdmin(admin.ModelAdmin):
@@ -33,3 +40,4 @@ class VariationAdmin(admin.ModelAdmin):
 
 admin.site.register(Variation, VariationAdmin)
 admin.site.register(ReviewRating)
+admin.site.register(ProductsGallery)

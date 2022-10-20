@@ -1,3 +1,6 @@
+from email.policy import default
+from itertools import product
+from tabnanny import verbose
 from django.db import models
 from django.db.models import Avg, Count
 from django.urls import reverse
@@ -90,3 +93,15 @@ class ReviewRating(models.Model):
 
     def __str__(self):
         return self.subject
+
+
+class ProductsGallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
+    image = models.ImageField(upload_to="store/products", max_length=250)
+
+    class Meta:
+        verbose_name = "productgallery"
+        verbose_name_plural = "product gallery"
+
+    def _str__(self):
+        return self.product.product_name

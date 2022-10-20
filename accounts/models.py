@@ -81,3 +81,28 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, add_label):
         return True
+
+
+gender = (
+    (None, "Choose Gender"),
+    ("M", "Male"),
+    ("F", "Female"),
+    ("Rather not say", "Rather not say"),
+)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE, related_name="users")
+    address_line_1 = models.CharField(max_length=100, blank=True)
+    address_line_2 = models.CharField(max_length=100, blank=True)
+    profile_picture = models.ImageField(blank=True, upload_to="user/profile/picture/")
+    city = models.CharField(blank=True, max_length=100)
+    state = models.CharField(blank=True, max_length=100)
+    country = models.CharField(blank=True, max_length=100)
+    gender = models.CharField(max_length=100, choices=gender)
+
+    def __str__(self):
+        return str(self.user)
+
+    def full_address(self):
+        return f"{self.address_line_1}, {self.city}, {self.state},{self.country}"

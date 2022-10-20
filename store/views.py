@@ -1,12 +1,14 @@
+from tkinter import PhotoImage
 from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from accounts.models import UserProfile
 from carts.models import CartItem
 from category.models import Category
 from order.models import OrderProduct
 from store.forms import ReviewForm
-from .models import Product, ReviewRating
+from .models import Product, ProductsGallery, ReviewRating
 from carts.views import _cart_id
 from .utils import search, pagination
 
@@ -61,6 +63,7 @@ def store(request, category_slug=None):
 
 
 def product_detail(request, category_slug, product_slug):
+
     try:
         single_product = Product.objects.get(
             category__slug=category_slug, slug=product_slug
@@ -85,13 +88,16 @@ def product_detail(request, category_slug, product_slug):
     reviews = ReviewRating.objects.filter(
         product_id=single_product.id, status=True
     ).order_by("created_at")
-
+    
+    #get other images from product gallery
+    products_gallery = ProductsGallery.objects.filter(product_id=single_product.id)
     context = {
         "single_product": single_product,
         "in_cart": in_cart,
         "range": range(10, 0, -1),
         "order_product": order_product,
         "reviews": reviews,
+        "products_gallery": products_gallery,
     }
 
     return render(request, "store/product-detail.html", context)
@@ -108,7 +114,6 @@ def review(request, product_id):
             review_rating = ReviewRating.objects.get(
                 user__id=request.user.id, product=product
             )
-            print(review_rating)
             form = ReviewForm(request.POST, instance=review_rating)
             form.save()
             messages.success(request, "Thank you your review has been updated")
