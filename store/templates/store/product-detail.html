@@ -166,11 +166,19 @@
           {% for review in reviews %}
           <article class="box mb-3">
             <div class="icontext w-100">
-              <img
-                src="{{ request.user.image.url }}"
-                class="img-xs icon rounded-circle"
-              />
-              <div class="text">
+             {% if review.user.users.profile_picture.url  %}
+             <img
+             src="{{ review.user.users.profile_picture.url }}"
+             class="img-xs icon rounded-circle"
+           />
+            {% else %}
+            <img
+             src="https://vectorified.com/images/default-user-icon-33.jpgv"
+             class="img-xs icon rounded-circle"
+           />
+            {% endif %}
+           <div class="text">
+              
                 <span class="date text-muted float-md-right">{{review.updated_at}} </span>
                 <h6 class="mb-1">{{ review.user.full_name}}</h6>
                 <div class="rating-star">
